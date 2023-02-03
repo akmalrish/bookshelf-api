@@ -52,7 +52,7 @@ const addBookHandler = (request, h) => {
   books.push(newBook);
 
   // eslint-disable-next-line max-len
-  const isSuccess = books.filter((book) => book.id === id).length > 0;
+  const isSuccess = books.filter((b) => b.id === id).length > 0;
 
   if (isSuccess) {
     const response = h.response({
@@ -76,20 +76,20 @@ const addBookHandler = (request, h) => {
 
 const getAllBookHandler = (request, h) => {
   const { name, reading, finished } = request.query;
-  let filteredBook = books;
+  let temp = books;
   if (name !== undefined) {
-    filteredBook = filteredBook.filter((b) => b.name.toLowerCase().includes(name.toLowerCase()));
+    temp = temp.filter((b) => b.name.toLowerCase().includes(name.toLowerCase()));
   }
   if (reading !== undefined) {
-    filteredBook = filteredBook.filter((b) => Number(b.reading) === Number(reading));
+    temp = temp.filter((b) => Number(b.reading) === Number(reading));
   }
   if (finished !== undefined) {
-    filteredBook = filteredBook.filter((b) => Number(b.finished) === Number(finished));
+    temp = temp.filter((b) => Number(b.finished) === Number(finished));
   }
   const response = h.response({
     status: 'success',
     data: {
-      books: filteredBook.map((b) => ({
+      books: temp.map((b) => ({
         id: b.id,
         name: b.name,
         publisher: b.publisher,
@@ -129,7 +129,7 @@ const updateBookHandler = (request, h) => {
   } = request.payload;
   const updatedAt = new Date().toISOString();
 
-  const index = books.findIndex((book) => book.id === id);
+  const index = books.findIndex((b) => b.id === id);
 
   if (name === undefined) {
     const response = h.response({
@@ -180,7 +180,7 @@ const updateBookHandler = (request, h) => {
 const deleteBookHandler = (request, h) => {
   const { id } = request.params;
 
-  const index = books.findIndex((book) => book.id === id);
+  const index = books.findIndex((b) => b.id === id);
 
   if (index !== -1) {
     books.splice(index, 1);
